@@ -6,7 +6,7 @@ export default function Home() {
     tagline: "Local-first AI assistant for video editors.",
     description:
       "Ingest footage, auto-transcribe, build rough cuts, generate social clips, and export cleanly to Premiere/Resolve/FCP — offline after setup.",
-    primaryCta: { label: "View repo", href: "https://github.com/tanzir/rough-cut" },
+    primaryCta: { label: "View repo", href: "https://github.com/tanzir71/rough-cut" },
     secondaryCta: { label: "See workflow", href: "#features" },
     keywords: ["Local-first", "Offline", "faster-whisper", "Ollama", "XML/EDL", "Premiere/Resolve/FCP"],
     features: [
@@ -33,7 +33,7 @@ export default function Home() {
       { label: "AI (offline)", value: "faster-whisper + Ollama (Qwen2.5 Instruct)" },
       { label: "Media", value: "ffmpeg (server) + Remotion Player (preview) + XML/EDL exports" },
     ],
-    contact: { label: "Open an issue", href: "https://github.com/tanzir/rough-cut/issues" },
+    contact: { label: "Open an issue", href: "https://github.com/tanzir71/rough-cut/issues" },
   }
 
   return (
@@ -163,7 +163,7 @@ export default function Home() {
 
       <footer className="border-t border-zinc-200">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-10 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-zinc-500">© {new Date().getFullYear()} {product.name}. All rights reserved.</p>
+          <p className="text-xs text-zinc-500">Vibe-coded with ♥ by tanziro.com</p>
           <div className="flex flex-wrap items-center gap-3 text-xs">
             <FooterLink href={product.primaryCta.href}>GitHub</FooterLink>
             <FooterLink href="#features">Features</FooterLink>
