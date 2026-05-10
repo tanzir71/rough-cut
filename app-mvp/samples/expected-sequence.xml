@@ -1,0 +1,2 @@
+<xmeml version="4"><project><name>Rough Cut</name><sequence><name>Rough Cut</name><rate><timebase>24</timebase><ntsc>FALSE</ntsc></rate><media><video><track><clipitem id="clipitem-1"><name>Segment 1</name><enabled>TRUE</enabled><start>0</start><end>24</end><in>0</in><out>24</out><file id="file-1"><name>sample.mp4</name><pathurl>file:///assets/sample.mp4</pathurl><rate><timebase>24</timebase><ntsc>FALSE</ntsc></rate></file></clipitem></track></video></media></sequence></project></xmeml>
+

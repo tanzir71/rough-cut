@@ -1,0 +1,19 @@
+{
+  "name": "app-mvp",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "services:up": "docker compose up -d",
+    "services:down": "docker compose down",
+    "services:logs": "docker compose logs -f --tail=200",
+    "frontend:install": "pnpm -C frontend install",
+    "frontend:dev": "pnpm -C frontend dev",
+    "frontend:check": "pnpm -C frontend check",
+    "frontend:lint": "pnpm -C frontend lint",
+    "backend:test": "docker compose run --rm api pytest -q",
+    "backend:format": "node -e \"console.log('No formatter configured in MVP')\"",
+    "dev": "pnpm run services:up && pnpm run frontend:dev"
+  }
+}
+

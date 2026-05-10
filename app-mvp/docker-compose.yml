@@ -1,0 +1,103 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: app_mvp
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: quay.io/minio/minio:RELEASE.2024-12-18T13-15-44Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio12345
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  api:
+    build:
+      context: ./backend
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: postgresql+psycopg2://app:app@postgres:5432/app_mvp
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_PUBLIC_ENDPOINT_URL: http://localhost:9000
+      S3_ACCESS_KEY_ID: minio
+      S3_SECRET_ACCESS_KEY: minio12345
+      S3_BUCKET_MEDIA: media
+      S3_BUCKET_EXPORTS: exports
+      SERVER_BASE_URL: http://localhost:8000
+      STORAGE_TMP_DIR: /tmp/app-mvp
+      WHISPER_MODEL: tiny
+      WHISPER_DEVICE: cpu
+      WHISPER_COMPUTE_TYPE: int8
+      WHISPER_CACHE_DIR: /models
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen2.5:7b-instruct
+      OPENROUTER_ENABLED: "false"
+      OPENROUTER_API_KEY: ""
+      OPENROUTER_MODELS_CSV: "qwen/qwen-2.5-72b-instruct"
+    volumes:
+      - whisper_models:/models
+      - app_tmp:/tmp/app-mvp
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    ports:
+      - "8000:8000"
+    command: ["sh", "-c", "python -m backend.core.wait_for && alembic -c alembic.ini upgrade head && uvicorn backend.api.main:app --host 0.0.0.0 --port 8000"]
+
+  worker:
+    build:
+      context: ./backend
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: postgresql+psycopg2://app:app@postgres:5432/app_mvp
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_PUBLIC_ENDPOINT_URL: http://localhost:9000
+      S3_ACCESS_KEY_ID: minio
+      S3_SECRET_ACCESS_KEY: minio12345
+      S3_BUCKET_MEDIA: media
+      S3_BUCKET_EXPORTS: exports
+      SERVER_BASE_URL: http://localhost:8000
+      STORAGE_TMP_DIR: /tmp/app-mvp
+      WHISPER_MODEL: tiny
+      WHISPER_DEVICE: cpu
+      WHISPER_COMPUTE_TYPE: int8
+      WHISPER_CACHE_DIR: /models
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen2.5:7b-instruct
+      OPENROUTER_ENABLED: "false"
+      OPENROUTER_API_KEY: ""
+      OPENROUTER_MODELS_CSV: "qwen/qwen-2.5-72b-instruct"
+    volumes:
+      - whisper_models:/models
+      - app_tmp:/tmp/app-mvp
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    command: ["sh", "-c", "python -m backend.core.wait_for && celery -A backend.workers.celery_app.celery_app worker -l info"]
+
+volumes:
+  postgres_data:
+  minio_data:
+  whisper_models:
+  app_tmp:
+

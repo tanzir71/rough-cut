@@ -1,0 +1,21 @@
+{
+  "appId": "com.localfirst.roughcut",
+  "productName": "Local Rough Cut Assistant",
+  "directories": {
+    "buildResources": "build",
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "dist-electron/**/*",
+    "package.json"
+  ],
+  "mac": {
+    "target": ["dmg"],
+    "category": "public.app-category.video"
+  },
+  "win": {
+    "target": ["nsis"]
+  }
+}
+
